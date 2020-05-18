@@ -7,7 +7,7 @@ package gps.Grafos;
 
 import java.util.ArrayList;
 
-/**
+/**        boolean aparece = false;
  *
  * @author sergio
  */
@@ -51,7 +51,6 @@ public class Ubicacion {
 
     public ArrayList<Camino> getCaminosAPieNoRepitentes() {
         ArrayList<Camino> caminosAPieAux = new ArrayList<>();
-        boolean aparece = false;
         for (int i = 0; i < caminosAPie.size(); i++) {
             caminosAPieAux.add(caminosAPie.get(i));
             

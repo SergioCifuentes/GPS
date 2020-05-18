@@ -21,12 +21,16 @@ public class Ruta {
     private double desgasteTotal;
     private double tiempoEnVehiculoTotal;
     private double tiempoAPieTotal;
-    private boolean mejorDistancia=false;
-    private boolean peorDistancia=false;
-    private boolean mejorPromedio=false;
-    private boolean peorPromedio=false;
-    private boolean mejorDesgaste=false;
-    private boolean peorDesgaste=false;
+    
+    
+    
+    private boolean mejorDistancia = false;
+    private boolean peorDistancia = false;
+    private boolean mejorPromedio = false;
+    private boolean peorPromedio = false;
+    private boolean mejorDesgaste = false;
+    private boolean peorDesgaste = false;
+    private int id=0;
 
     public boolean isMejorDistancia() {
         return mejorDistancia;
@@ -36,7 +40,15 @@ public class Ruta {
         this.mejorDistancia = mejorDistancia;
     }
 
-    public boolean isPeorDistancia() {
+    public void reset() {
+    mejorDistancia = false;
+    peorDistancia = false;
+    mejorPromedio = false;
+    peorPromedio = false;
+    mejorDesgaste = false;
+    peorDesgaste = false;
+}
+public boolean isPeorDistancia() {
         return peorDistancia;
     }
 
@@ -60,6 +72,10 @@ public class Ruta {
         this.peorPromedio = peorPromedio;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public boolean isMejorDesgaste() {
         return mejorDesgaste;
     }
@@ -75,6 +91,10 @@ public class Ruta {
     public void setPeorDesgaste(boolean peorDesgaste) {
         this.peorDesgaste = peorDesgaste;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
     
     
@@ -88,6 +108,7 @@ public class Ruta {
         desgasteTotal=0;
         tiempoAPieTotal=0;
         tiempoEnVehiculoTotal=0;
+        id=0;
     }
 
     public void agregarCamino(Camino camino) {

@@ -5,13 +5,17 @@
  */
 package gps.ui;
 
+import gps.ArbolB.ControladorArbolB;
 import gps.Entrada.ManejadorEntrada;
 import gps.Grafos.ControladorGrafos;
+import gps.Grafos.Ubicacion;
 import java.awt.Dimension;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -19,7 +23,9 @@ import javax.swing.JPanel;
  * @author sergio
  */
 public class MenuPrincipal extends javax.swing.JFrame {
+
     private ControladorGrafos controladorGrafos;
+    private ControladorArbolB controladorArbolB;
     private File file;
 
     /**
@@ -27,8 +33,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
-        controladorGrafos= new ControladorGrafos();
-        
+        controladorGrafos = new ControladorGrafos(this);
+        lblMensajeError.setVisible(false);
+        btnSiguiente.setEnabled(false);
+        btnTerminar.setEnabled(false);
+        controladorArbolB = new ControladorArbolB();
+
+    }
+
+    public ControladorArbolB getControladorArbolB() {
+        return controladorArbolB;
     }
 
     /**
@@ -56,16 +70,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
         lblMensajeError = new javax.swing.JLabel();
         scrollMejores = new javax.swing.JScrollPane();
         panelCaminos = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        btnEmpezar = new javax.swing.JButton();
+        btnSiguiente = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         panelGrafo = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
         panelArbol = new javax.swing.JPanel();
+        btnTerminar = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
         jMenu1.setText("File");
@@ -157,62 +172,35 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(0, 0, 0))
         );
 
-        jPanel1.setBackground(new java.awt.Color(254, 254, 254));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 213, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 80, Short.MAX_VALUE)
-        );
-
-        jPanel2.setBackground(new java.awt.Color(73, 17, 72));
-        jPanel2.setForeground(new java.awt.Color(29, 42, 75));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 80, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout panelCaminosLayout = new javax.swing.GroupLayout(panelCaminos);
         panelCaminos.setLayout(panelCaminosLayout);
         panelCaminosLayout.setHorizontalGroup(
             panelCaminosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 226, Short.MAX_VALUE)
         );
         panelCaminosLayout.setVerticalGroup(
             panelCaminosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCaminosLayout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 205, Short.MAX_VALUE))
+            .addGap(0, 454, Short.MAX_VALUE)
         );
 
         scrollMejores.setViewportView(panelCaminos);
 
-        btnEmpezar.setText("Empezar");
+        btnSiguiente.setText("Siguiente");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelGrafoLayout = new javax.swing.GroupLayout(panelGrafo);
         panelGrafo.setLayout(panelGrafoLayout);
         panelGrafoLayout.setHorizontalGroup(
             panelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 619, Short.MAX_VALUE)
+            .addGap(0, 625, Short.MAX_VALUE)
         );
         panelGrafoLayout.setVerticalGroup(
             panelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 272, Short.MAX_VALUE)
+            .addGap(0, 375, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(panelGrafo);
@@ -223,18 +211,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
         panelArbol.setLayout(panelArbolLayout);
         panelArbolLayout.setHorizontalGroup(
             panelArbolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 621, Short.MAX_VALUE)
+            .addGap(0, 625, Short.MAX_VALUE)
         );
         panelArbolLayout.setVerticalGroup(
             panelArbolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGap(0, 375, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Arbol", panelArbol);
+        jScrollPane2.setViewportView(panelArbol);
 
-        jMenu3.setText("File");
+        jTabbedPane1.addTab("ArbolB", jScrollPane2);
 
-        jMenuItem1.setText("Open");
+        btnTerminar.setText("Terminar");
+        btnTerminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTerminarActionPerformed(evt);
+            }
+        });
+
+        jMenu3.setText("Archivo");
+
+        jMenuItem1.setText("Abrir");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -242,9 +239,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem1);
 
+        jMenuItem2.setText("Reset");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem2);
+
         jMenuBar2.add(jMenu3);
 
-        jMenu4.setText("Edit");
+        jMenu4.setText("Ayuda");
         jMenuBar2.add(jMenu4);
 
         setJMenuBar(jMenuBar2);
@@ -258,12 +263,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scrollMejores)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnEmpezar)
+                        .addComponent(btnSiguiente)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTerminar)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -273,14 +280,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(scrollMejores, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(btnEmpezar))
+                        .addComponent(scrollMejores)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSiguiente)
+                            .addComponent(btnTerminar)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTabbedPane1)))
                 .addContainerGap())
         );
 
@@ -288,15 +296,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        file=null;
-        JFileChooser jfc= new JFileChooser();
+        file = null;
+        JFileChooser jfc = new JFileChooser();
         jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         jfc.showOpenDialog(this);
         file = jfc.getSelectedFile();
         if (file != null) {
-            ManejadorEntrada me=new ManejadorEntrada() ;
-            me.abrirArchivo(controladorGrafos,file);
+            ManejadorEntrada me = new ManejadorEntrada();
+            me.abrirArchivo(controladorGrafos, file);
+            
             agregarUbicaciones();
+            controladorGrafos.dibujarGrafo(this);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -309,48 +319,105 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_pieBtnActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        btnTerminar.setEnabled(false);
+        btnSiguiente.setEnabled(false);
+        lblMensajeError.setVisible(false);
         if (comBoxOrigen.getSelectedItem().equals(comBoxDestino.getSelectedItem())) {
             lblMensajeError.setText("Origen y Destino Son iguales");
             lblMensajeError.setVisible(true);
-        }else{
-            if (vehiculoBtn.isSelected()||pieBtn.isSelected()) {
-                controladorGrafos.agregarRutas(comBoxOrigen.getSelectedIndex(),comBoxDestino.getSelectedIndex(),this,vehiculoBtn.isSelected());
-            }else{
+        } else {
+            if (vehiculoBtn.isSelected() || pieBtn.isSelected()) {
+                controladorGrafos.agregarRutas(comBoxOrigen.getSelectedIndex(), comBoxDestino.getSelectedIndex(), this, vehiculoBtn.isSelected());
+                btnTerminar.setEnabled(true);
+                btnSiguiente.setEnabled(true);
+            } else {
                 lblMensajeError.setText("Debe Selecionar Vehiculo o A Pie");
                 lblMensajeError.setVisible(true);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-private void agregarUbicaciones(){
-    comBoxOrigen.removeAllItems();
-    comBoxDestino.removeAllItems();
-    for (int i = 0; i < controladorGrafos.getUbicaciones().size(); i++) {
-        comBoxOrigen.addItem(controladorGrafos.getUbicaciones().get(i).toString());
-        comBoxDestino.addItem(controladorGrafos.getUbicaciones().get(i).toString());
+
+    private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
+        mostrarLLegarADestino();
+        
+
+    }//GEN-LAST:event_btnTerminarActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        controladorGrafos.moverALaSiguienteUbicacion();
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        panelArbol.removeAll();
+        panelCaminos.removeAll();
+        panelGrafo.removeAll();
+        comBoxDestino.removeAllItems();
+        comBoxOrigen.removeAllItems();
+        controladorGrafos.resetUbicacion();
+        this.validate();
+        this.repaint();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    private void agregarUbicaciones() {
+        comBoxOrigen.removeAllItems();
+        comBoxDestino.removeAllItems();
+        for (int i = 0; i < controladorGrafos.getUbicaciones().size(); i++) {
+            comBoxOrigen.addItem(controladorGrafos.getUbicaciones().get(i).toString());
+            comBoxDestino.addItem(controladorGrafos.getUbicaciones().get(i).toString());
+        }
+        if (comBoxDestino.getItemCount() > 1) {
+            comBoxDestino.setSelectedIndex(1);
+        }
     }
-    if (comBoxDestino.getItemCount()>1) {
-        comBoxDestino.setSelectedIndex(1);
+
+    public void mostrarLLegarADestino() {
+        JOptionPane.showMessageDialog(this, "Llegaste a tu Destino " + controladorGrafos.getDestino().getNombre() + ", \n Gracias por Utilizar la App", "Destino Alcanzado", JOptionPane.INFORMATION_MESSAGE);
+        panelCaminos.removeAll();
+        panelGrafo.removeAll();
+        panelArbol.removeAll();
+        this.repaint();
+        this.validate();
     }
-}
-public void setImageGrafos(ImageIcon im){
-    panelGrafo.removeAll();
-    JLabel fondo = new JLabel();
-    System.out.println(im.getIconHeight()+"sasas");
-        fondo.setSize(im.getIconWidth(),im.getIconHeight());
-        panelGrafo.setPreferredSize(new Dimension(im.getIconWidth(),im.getIconHeight()));
+
+    public void setImageGrafos(ImageIcon im) {
+        panelGrafo.removeAll();
+        JLabel fondo = new JLabel();
+        fondo.setSize(im.getIconWidth(), im.getIconHeight());
+        panelGrafo.setPreferredSize(new Dimension(im.getIconWidth(), im.getIconHeight()));
         fondo.setLocation(0, 0);
         fondo.setIcon(im);
         panelGrafo.add(fondo);
         fondo.setVisible(true);
         this.repaint();
         this.validate();
-}
+        panelGrafo.repaint();
+        panelCaminos.validate();
+        fondo.repaint();
+        fondo.validate();
+    }
 
-public JPanel getPanelRutas(){
-    return panelCaminos;
-}
+    public void setImageArbol(ImageIcon im) {
+        panelArbol.removeAll();
+        JLabel fondo = new JLabel();
+        fondo.setSize(im.getIconWidth(), im.getIconHeight());
+        panelArbol.setPreferredSize(new Dimension(im.getIconWidth(), im.getIconHeight()));
+        fondo.setLocation(0, 0);
+        fondo.setIcon(im);
+        panelArbol.add(fondo);
+        fondo.setVisible(true);
+        this.repaint();
+        this.validate();
+        panelArbol.repaint();
+        panelCaminos.validate();
+        fondo.repaint();
+        fondo.validate();
+    }
+
+    public JPanel getPanelRutas() {
+        return panelCaminos;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEmpezar;
+    private javax.swing.JButton btnSiguiente;
+    private javax.swing.JButton btnTerminar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<String> comBoxDestino;
@@ -365,10 +432,10 @@ public JPanel getPanelRutas(){
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblMensajeError;
     private javax.swing.JPanel panelArbol;

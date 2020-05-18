@@ -5,6 +5,7 @@
  */
 package gps.Graphviz;
 
+import gps.ArbolB.ArbolB;
 import gps.Grafos.Camino;
 import gps.Grafos.Ruta;
 import gps.Grafos.Ubicacion;
@@ -53,6 +54,46 @@ public class Grafos {
     }
     
     
+    public void crearArbol(ArbolB arbolB,String id){
+        File carpeta=new File("./ArbolB");
+        if (!carpeta.exists()) {
+            carpeta.mkdir();
+            carpeta.mkdirs();
+            
+        }
+        File archivo = new File(carpeta.getPath()+"/"+id+".dot");
+        try {
+            archivo.createNewFile();
+            FileWriter fw = new FileWriter(archivo);
+            fw.write(arbolB.toDot());
+            fw.close();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Grafos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            
+            Process p = Runtime.getRuntime().exec("dot -Tpng "+archivo.getPath()+" -o "+"./ArbolB/"+id+".png");
+        } catch (IOException ex) {
+            Logger.getLogger(Grafos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public  void eliminarGrafosAnteriores(){
+        File carpeta=new File("./Grafos");
+        
+        if (carpeta.exists()) {
+        String[] archivos= carpeta.list();
+            for (int i = 0; i <archivos.length; i++) {
+                
+                File file = new File(carpeta.getPath()+"/"+archivos[i]);
+                
+                file.delete();
+            }
+        }
+    }
     private void crearArchivo(String nombre,String contenido){
         File carpeta=new File("./Grafos");
         if (!carpeta.exists()) {

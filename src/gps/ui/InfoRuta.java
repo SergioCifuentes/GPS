@@ -5,7 +5,6 @@
  */
 package gps.ui;
 
-import com.sun.xml.internal.ws.api.model.MEP;
 import gps.Grafos.ControladorDeRutas;
 import gps.Grafos.Ruta;
 import java.awt.Color;
@@ -30,9 +29,18 @@ public class InfoRuta extends JPanel {
     public static final String M_DESGASTE = "Desgaste ";
     public static final String M_GASOLINA = "Consumo de Gas ";
     public static final String AND = "& ";
+    public static final String ID = "#ID: ";
     private boolean seleccionado=false;
-    private int index;
+    private String index;
     private ControladorDeRutas cdr;
+private Ruta ruta;
+    public String getIndex() {
+        return index;
+    }
+
+    public Ruta getRuta() {
+        return ruta;
+    }
 
     public void setCdr(ControladorDeRutas cdr) {
         this.cdr = cdr;
@@ -42,8 +50,9 @@ public class InfoRuta extends JPanel {
      *
      * @param distancia
      */
-    public InfoRuta(Ruta ruta, boolean enVehiculo,ControladorDeRutas cdr,int index) {
+    public InfoRuta(Ruta ruta, boolean enVehiculo,ControladorDeRutas cdr,String index) {
         initComponents();
+        this.ruta=ruta;
         this.cdr=cdr;
         this.index=index;
         this.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK));
@@ -55,6 +64,7 @@ public class InfoRuta extends JPanel {
             lblTiempo.setText(TIEMPO + String.valueOf(ruta.getTiempoAPieTotal()));
             lblDesgaste.setText(DESGASTE + String.valueOf(ruta.getDesgasteTotal()));
         }
+        lblID.setText(ID+ruta.getId());
         String descripcion = "";
         boolean agregar = false;
         if (ruta.isMejorPromedio()) {
@@ -160,7 +170,7 @@ public class InfoRuta extends JPanel {
     public void setSeleccionado(boolean seleccionado) {
         this.seleccionado = seleccionado;
         if (seleccionado) {
-            this.setBorder(javax.swing.BorderFactory.createLineBorder(Color.ORANGE,2));
+            this.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLUE,2));
         }else{
             this.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK,1));
         }
@@ -180,6 +190,7 @@ public class InfoRuta extends JPanel {
         lblDistancia = new javax.swing.JLabel();
         lblPeores = new javax.swing.JLabel();
         lblDesgaste = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(254, 254, 254));
 
@@ -200,6 +211,9 @@ public class InfoRuta extends JPanel {
         lblDesgaste.setForeground(new java.awt.Color(1, 1, 1));
         lblDesgaste.setText("Desgaste:");
 
+        lblID.setForeground(new java.awt.Color(1, 1, 1));
+        lblID.setText("#ID:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -210,10 +224,13 @@ public class InfoRuta extends JPanel {
                     .addComponent(lblPeores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDesgaste)
                             .addComponent(lblTiempo)
-                            .addComponent(lblDistancia)
-                            .addComponent(lblDesgaste))
-                        .addGap(0, 166, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblDistancia)
+                                .addGap(43, 43, 43)
+                                .addComponent(lblID)))
+                        .addGap(0, 102, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -223,7 +240,9 @@ public class InfoRuta extends JPanel {
                 .addGap(3, 3, 3)
                 .addComponent(lblPeores)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblDistancia)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDistancia)
+                    .addComponent(lblID))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTiempo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -235,6 +254,7 @@ public class InfoRuta extends JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblDesgaste;
     private javax.swing.JLabel lblDistancia;
+    private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblMejores;
     private javax.swing.JLabel lblPeores;
     private javax.swing.JLabel lblTiempo;

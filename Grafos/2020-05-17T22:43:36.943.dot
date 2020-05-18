@@ -1,0 +1,16 @@
+digraph G {
+size ="4,4";
+a -> b [style=bold,label="10.0"];
+b -> f [style=bold,label="15.0"];
+b -> c [style=bold,label="5.0",color=blue];
+c -> b [style=bold,label="16.0"];
+c -> g [style=bold,label="9.0"];
+c -> e [style=bold,label="8.0"];
+c -> d [style=bold,label="12.0",color=blue];
+d -> g [style=bold,label="23.0",color=blue];
+g -> f [style=bold,label="6.0"];
+h -> a [style=bold,label="11.0"];
+h -> f [style=bold,label="21.0",color=blue];
+h -> i [style=bold,label="21.0",color=blue];
+i -> g [style=bold,label="14.0",color=blue];
+}
